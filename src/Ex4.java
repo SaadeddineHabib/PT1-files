@@ -1,7 +1,26 @@
 import java.io.File;
+import java.nio.file.FileSystems;
 import java.util.concurrent.TimeUnit;
 
 public class Ex4 {
+
+    public static String getAutomaticPath(String path){
+        String separador = FileSystems.getDefault().getSeparator();
+        String sistemaOperativo = System.getProperty("os.name");
+
+        System.out.println(separador);
+
+        if (sistemaOperativo.toLowerCase().contains("linux")) {
+            System.out.println(path);
+            path = path.replace("\\", separador);
+            System.out.println(path);
+            path = path.replace("C:", "");
+            System.out.println(path);
+        } else if (sistemaOperativo.toLowerCase().contains("windows")) {
+            path = path.replace("/", separador);
+        }
+        return path;
+    }
 
     public static void showFileInformation(File[] filesDirectory) {
         for (File file : filesDirectory) {
@@ -31,11 +50,10 @@ public class Ex4 {
     }
 
     public static void main(String[] args) {
-        String pathLinux = "./";
-        String pathWindows = ".\\";
+        String path = ".";
 
         try {
-            File diretory = new File(pathWindows);
+            File diretory = new File(getAutomaticPath(path));
             File[] directoryFiles = diretory.listFiles();
             showFileInformation(directoryFiles);
         } catch (Exception e) {

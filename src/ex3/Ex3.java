@@ -1,8 +1,12 @@
+package ex3;
+
 import java.io.File;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
-public class Ex2 {
+public class Ex3 {
 
     public static String getAutomaticPath (String path){
         String separador = FileSystems.getDefault().getSeparator();
@@ -23,35 +27,26 @@ public class Ex2 {
     }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        File directory;
+
 
         try {
-            if (args.length > 0) {
-                String arguments = args[0];
-                directory = new File(getAutomaticPath(arguments));
-
-            } else {
-                System.out.print("Introdueix el directori: ");
-                directory = new File(sc.next());
-            }
+            File directory = new File(getAutomaticPath("src/ex3"));
 
             File[] directoryList;
 
             directoryList = directory.listFiles();
 
-            File arxiuGran = directoryList[0];
             for (File file : directoryList) {
-                if (file.length() > arxiuGran.length()) {
-                    arxiuGran = file;
+                if (file.getName().contains("exercici")) {
+                    System.out.printf("El arxiu %s el seu contigut es: %n", file.getName());
+                    for (int i = 0; i < Files.readAllLines(Path.of(file.getPath())).size(); i++) {
+                        System.out.println(Files.readAllLines(Path.of(file.getPath())).get(i));
+                    }
                 }
+                System.out.println();
             }
-
-            System.out.printf("El arxiu mes gran es %s amb %s Bytes en el directori %s", arxiuGran.getName(), arxiuGran.length(), directory.getName());
         } catch (Exception e) {
             System.out.println(e);
         }
-
-
     }
-
 }

@@ -1,6 +1,7 @@
 package ex7;
 
 import java.io.File;
+import java.nio.file.FileSystems;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +14,26 @@ public class DirectoryManager {
     public DirectoryManager() {
     }
 
+    public static String getAutomaticPath(String path){
+        String separador = FileSystems.getDefault().getSeparator();
+        String sistemaOperativo = System.getProperty("os.name");
+
+        System.out.println(separador);
+
+        if (sistemaOperativo.toLowerCase().contains("linux")) {
+            System.out.println(path);
+            path = path.replace("\\", separador);
+            System.out.println(path);
+            path = path.replace("C:", "");
+            System.out.println(path);
+        } else if (sistemaOperativo.toLowerCase().contains("windows")) {
+            path = path.replace("/", separador);
+        }
+        return path;
+    }
+
     public boolean getDirectoryFiles(String path) {
-        this.path = path;
+        this.path = getAutomaticPath(path);
         directory = creatControlledFile(path);
         if (directory == null) {
             System.out.println("El camí proporcionat és incorrecte");
